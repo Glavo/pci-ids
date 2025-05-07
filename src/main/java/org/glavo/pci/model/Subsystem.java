@@ -30,27 +30,17 @@ import java.util.Objects;
 public final class Subsystem implements Comparable<Subsystem> {
 
     /**
-     * String representation of the unique 16 Bit ID.
+     * Unique 16 Bit ID.
      */
-    private final String id;
+    private final int id;
     private final String name;
     private final String comment;
 
     /**
-     * String representation of the unique 16 Bit subsystem vendor ID. This ID can be used as a link
+     * The unique 16 Bit subsystem vendor ID. This ID can be used as a link
      * to another {@link Vendor} object.
      */
-    private final String vendorId;
-
-    /**
-     * Integer representation of the unique 16 Bit ID. For internal use only.
-     */
-    private final int numericId;
-
-    /**
-     * Integer representation of the unique 16 Bit subsystem vendor ID. For internal use only.
-     */
-    private final int numericVendorId;
+    private final int vendorId;
 
     /**
      * Create a new Subsystem database entry.
@@ -60,21 +50,18 @@ public final class Subsystem implements Comparable<Subsystem> {
      * @param comment  Optional comment, may be null
      * @param vendorId Vendor ID of this subsystem's vendor
      */
-    public Subsystem(String id, String name, String comment, String vendorId) {
-        ArgumentValidator.requireStringLength(vendorId, 4, ArgumentValidator.NumberCompare.EQUAL, "Subsystem vendor ID");
-        ArgumentValidator.requireStringLength(id, 4, ArgumentValidator.NumberCompare.EQUAL, "Subsystem ID");
+    public Subsystem(int id, String name, String comment, int vendorId) {
+        ArgumentValidator.requireUnsignedShort(vendorId, "Subsystem vendor ID");
+        ArgumentValidator.requireUnsignedShort(id, "Subsystem ID");
         ArgumentValidator.requireNonBlank(name, "Subsystem name");
 
         this.id = id;
         this.name = name;
         this.comment = comment;
         this.vendorId = vendorId;
-
-        this.numericId = Integer.parseInt(id, 16);
-        this.numericVendorId = Integer.parseInt(vendorId, 16);
     }
 
-    public String getId() {
+    public int getId() {
         return this.id;
     }
 
@@ -86,7 +73,7 @@ public final class Subsystem implements Comparable<Subsystem> {
         return this.comment;
     }
 
-    public String getVendorId() {
+    public int getVendorId() {
         return this.vendorId;
     }
 
@@ -100,11 +87,11 @@ public final class Subsystem implements Comparable<Subsystem> {
      */
     @Override
     public int compareTo(Subsystem t) {
-        if (this.numericVendorId == t.numericVendorId) {
-            return Integer.compare(this.numericId, t.numericId);
+        if (this.vendorId == t.vendorId) {
+            return Integer.compare(this.id, t.id);
         }
 
-        return Integer.compare(this.numericVendorId, t.numericVendorId);
+        return Integer.compare(this.vendorId, t.vendorId);
     }
 
     @Override
@@ -120,7 +107,6 @@ public final class Subsystem implements Comparable<Subsystem> {
     }
 
     public String toString() {
-        return String.format("Subsystem[id=%s, name=%s, comment=%s, vendorId=%s, numericId=%d, numericVendorId=%d]",
-                this.getId(), this.getName(), this.getComment(), this.getVendorId(), this.numericId, this.numericVendorId);
+        return String.format("Subsystem[id=%04x, name=%s, comment=%s, vendorId=%04x]", this.getId(), this.getName(), this.getComment(), this.getVendorId());
     }
 }

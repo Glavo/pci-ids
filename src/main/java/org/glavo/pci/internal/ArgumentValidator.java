@@ -35,7 +35,6 @@ public final class ArgumentValidator {
      *
      * @param arg Argument to test
      * @param msg Message used to construct the exception message
-     *
      * @throws IllegalArgumentException if specified argument is blank
      */
     public static void requireNonBlank(String arg, String msg) {
@@ -52,8 +51,8 @@ public final class ArgumentValidator {
      * <tt>"String length violation (" + name + "): string(" + arg.length() + ") " +
      * comp.getOperator() + " " + len</tt>
      *
-     * @param arg String to test
-     * @param len Value to be used as reference in comparison
+     * @param arg  String to test
+     * @param len  Value to be used as reference in comparison
      * @param comp Comparison operator to be used
      * @param name Name to be referenced in exception message
      */
@@ -98,12 +97,23 @@ public final class ArgumentValidator {
      *
      * @param arg Argument to test
      * @param msg Message used to construct the exception message
-     *
      * @throws IllegalArgumentException if specified argument is null
      */
     public static void requireNonNull(Object arg, String msg) {
-        if (Objects.isNull(arg)) {
+        if (arg == null) {
             throw new IllegalArgumentException("NULL: " + msg);
+        }
+    }
+
+    public static void requireUnsignedByte(int arg, String name) {
+        if (arg < 0 || arg > 0xff) {
+            throw new IllegalArgumentException(name + " (" + arg + ") should be between 0 and 0xff");
+        }
+    }
+
+    public static void requireUnsignedShort(int arg, String name) {
+        if (arg < 0 || arg > 0xffff) {
+            throw new IllegalArgumentException(name + " (" + arg + ") should be between 0 and 0xffff");
         }
     }
 

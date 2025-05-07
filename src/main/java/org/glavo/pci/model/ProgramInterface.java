@@ -30,16 +30,11 @@ import java.util.Objects;
 public final class ProgramInterface implements Comparable<ProgramInterface> {
 
     /**
-     * String representation of the unique 8 Bit ID.
+     * Unique 8 Bit ID.
      */
-    private final String id;
+    private final int id;
     private final String name;
     private final String comment;
-
-    /**
-     * Integer representation of the unique 8 Bit ID. For internal use only.
-     */
-    private final int numericId;
 
     /**
      * Create a new Progrmam Interface database entry.
@@ -48,18 +43,16 @@ public final class ProgramInterface implements Comparable<ProgramInterface> {
      * @param name    Full name of the program interface
      * @param comment Optional comment, may be null
      */
-    public ProgramInterface(String id, String name, String comment) {
-        ArgumentValidator.requireStringLength(id, 2, ArgumentValidator.NumberCompare.EQUAL, "Program interface ID");
+    public ProgramInterface(int id, String name, String comment) {
+        ArgumentValidator.requireUnsignedByte(id, "Program interface ID");
         ArgumentValidator.requireNonBlank(name, "Program interface name");
 
         this.id = id;
         this.name = name;
         this.comment = comment;
-
-        this.numericId = Integer.parseInt(id, 16);
     }
 
-    public String getId() {
+    public int getId() {
         return this.id;
     }
 
@@ -80,7 +73,7 @@ public final class ProgramInterface implements Comparable<ProgramInterface> {
      */
     @Override
     public int compareTo(ProgramInterface t) {
-        return Integer.compare(this.numericId, t.numericId);
+        return Integer.compare(this.id, t.id);
     }
 
     @Override
@@ -96,6 +89,6 @@ public final class ProgramInterface implements Comparable<ProgramInterface> {
     }
 
     public String toString() {
-        return String.format("ProgramInterface[id=%s, name=%s, comment=%s, numericId=%d]", this.getId(), this.getName(), this.getComment(), this.numericId);
+        return String.format("ProgramInterface[id=%02x, name='%s']", this.getId(), this.getName());
     }
 }

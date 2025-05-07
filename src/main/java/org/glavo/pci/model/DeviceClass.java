@@ -32,9 +32,9 @@ import java.util.Objects;
 public final class DeviceClass implements Comparable<DeviceClass> {
 
     /**
-     * String representation of the unique 8 Bit ID.
+     * Unique 8 Bit ID.
      */
-    private final String id;
+    private final int id;
     private final String name;
     private final String comment;
 
@@ -42,12 +42,8 @@ public final class DeviceClass implements Comparable<DeviceClass> {
      * Internal map of subclasses belonging to this device class. Identified by their unique 8 Bit
      * ID.
      */
-    private final Map<String, DeviceSubclass> subclasses;
+    private final Map<Integer, DeviceSubclass> subclasses;
 
-    /**
-     * Integer representation of the unique 8 Bit ID. For internal use only.
-     */
-    private final int numericId;
 
     /**
      * Create a new Device Class database entry.
@@ -56,8 +52,8 @@ public final class DeviceClass implements Comparable<DeviceClass> {
      * @param name    Full name of the device class
      * @param comment Optional comment, may be null
      */
-    public DeviceClass(String id, String name, String comment) {
-        ArgumentValidator.requireStringLength(id, 2, ArgumentValidator.NumberCompare.EQUAL, "Device class ID");
+    public DeviceClass(int id, String name, String comment) {
+        ArgumentValidator.requireUnsignedByte(id, "Device class ID");
         ArgumentValidator.requireNonBlank(name, "Device class name");
 
         this.id = id;
@@ -65,7 +61,6 @@ public final class DeviceClass implements Comparable<DeviceClass> {
         this.comment = comment;
         this.subclasses = new HashMap<>();
 
-        this.numericId = Integer.parseInt(id, 16);
     }
 
     /**
@@ -79,8 +74,7 @@ public final class DeviceClass implements Comparable<DeviceClass> {
         this.subclasses.put(subclass.getId(), subclass);
     }
 
-
-    public String getId() {
+    public int getId() {
         return this.id;
     }
 
@@ -97,7 +91,7 @@ public final class DeviceClass implements Comparable<DeviceClass> {
      *
      * @return Unmodifiable map view
      */
-    public Map<String, DeviceSubclass> getSubclasses() {
+    public Map<Integer, DeviceSubclass> getSubclasses() {
         return Collections.unmodifiableMap(this.subclasses);
     }
 
@@ -110,7 +104,7 @@ public final class DeviceClass implements Comparable<DeviceClass> {
      */
     @Override
     public int compareTo(DeviceClass t) {
-        return Integer.compare(this.numericId, t.numericId);
+        return Integer.compare(this.id, t.id);
     }
 
     @Override
@@ -126,7 +120,6 @@ public final class DeviceClass implements Comparable<DeviceClass> {
     }
 
     public String toString() {
-        return String.format("DeviceClass[id=%s, name=%s, comment=%s, subclasses=%s, numericId=%s]",
-                this.getId(), this.getName(), this.getComment(), this.getSubclasses(), this.numericId);
+        return String.format("DeviceClass[id=%04x, name=%s]", this.getId(), this.getName());
     }
 }

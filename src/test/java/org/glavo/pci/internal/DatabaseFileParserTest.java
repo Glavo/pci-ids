@@ -42,86 +42,86 @@ public class DatabaseFileParserTest {
 
     @Test
     public void testParseSimpleDatabaseFile() throws Exception {
-        final Map<String, Vendor> vendorDatabase = new TreeMap<>();
-        final Map<String, DeviceClass> deviceClassDatabase = new TreeMap<>();
+        final Map<Integer, Vendor> vendorDatabase = new TreeMap<>();
+        final Map<Integer, DeviceClass> deviceClassDatabase = new TreeMap<>();
 
         DatabaseFileParser instance = new DatabaseFileParser();
         try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(this.getClass().getResourceAsStream("simple.pci.ids"), StandardCharsets.UTF_8))) {
+                new InputStreamReader(this.getClass().getResourceAsStream("../simple.pci.ids"), StandardCharsets.UTF_8))) {
             instance.parseDatabaseFile(reader, vendorDatabase, deviceClassDatabase);
         }
 
         // Vendor database
         assertEquals(1, vendorDatabase.size());
 
-        Vendor v = vendorDatabase.get("001c");
+        Vendor v = vendorDatabase.get(0x001c);
         assertNotNull(v);
-        assertEquals("001c", v.getId());
+        assertEquals(0x001c, v.getId());
         assertEquals("PEAK-System Technik GmbH", v.getName());
         assertEquals("Comment on vendor", v.getComment());
 
-        Device d = v.getDevices().get("0001");
+        Device d = v.getDevices().get(0x0001);
         assertNotNull(d);
-        assertEquals("0001", d.getId());
+        assertEquals(0x0001, d.getId());
         assertEquals("PCAN-PCI CAN-Bus controller", d.getName());
         assertEquals("Comment on device", d.getComment());
 
         Subsystem s1 = d.getSubsystems().stream()
-                .filter(s -> (s.getVendorId().equals("001c") && s.getId().equals("0004")))
+                .filter(s -> s.getVendorId() == 0x001c && s.getId() == 0x0004)
                 .findFirst()
                 .get();
 
-        assertEquals("0004", s1.getId());
-        assertEquals("001c", s1.getVendorId());
+        assertEquals(0x0004, s1.getId());
+        assertEquals(0x001c, s1.getVendorId());
         assertEquals("2 Channel CAN Bus SJC1000", s1.getName());
         assertEquals("Comment on subsystem", s1.getComment());
 
         Subsystem s2 = d.getSubsystems().stream()
-                .filter(s -> (s.getVendorId().equals("001c") && s.getId().equals("0005")))
+                .filter(s -> s.getVendorId() == 0x001c && s.getId() == 0x0005)
                 .findFirst()
                 .get();
 
-        assertEquals("0005", s2.getId());
-        assertEquals("001c", s2.getVendorId());
+        assertEquals(0x0005, s2.getId());
+        assertEquals(0x001c, s2.getVendorId());
         assertEquals("2 Channel CAN Bus SJC1000 MOCK", s2.getName());
         assertNull(s2.getComment());
 
         // Device classes database
-        assertEquals(deviceClassDatabase.size(), 1);
+        assertEquals(1, deviceClassDatabase.size());
 
-        DeviceClass dc = deviceClassDatabase.get("01");
+        DeviceClass dc = deviceClassDatabase.get(0x01);
         assertNotNull(dc);
-        assertEquals("01", dc.getId());
+        assertEquals(0x01, dc.getId());
         assertEquals("Mass storage controller", dc.getName());
         assertEquals("Comment on device class", dc.getComment());
 
-        DeviceSubclass dsc = dc.getSubclasses().get("05");
+        DeviceSubclass dsc = dc.getSubclasses().get(0x05);
         assertNotNull(dsc);
-        assertEquals("05", dsc.getId());
+        assertEquals(0x05, dsc.getId());
         assertEquals("ATA controller", dsc.getName());
         assertEquals("Comment on device subclass", dsc.getComment());
 
-        ProgramInterface pi1 = dsc.getProgramInterfaces().get("20");
+        ProgramInterface pi1 = dsc.getProgramInterfaces().get(0x20);
         assertNotNull(pi1);
-        assertEquals("20", pi1.getId());
+        assertEquals(0x20, pi1.getId());
         assertEquals("ADMA single stepping", pi1.getName());
         assertEquals("Comment on program interface", pi1.getComment());
 
-        ProgramInterface pi2 = dsc.getProgramInterfaces().get("30");
+        ProgramInterface pi2 = dsc.getProgramInterfaces().get(0x30);
         assertNotNull(pi2);
-        assertEquals("30", pi2.getId());
+        assertEquals(0x30, pi2.getId());
         assertEquals("ADMA continuous operation", pi2.getName());
         assertNull(pi2.getComment());
     }
 
     @Test
     public void testParseRealWorldDatabaseFile() throws Exception {
-        final Map<String, Vendor> vendorDatabase = new TreeMap<>();
-        final Map<String, DeviceClass> deviceClassDatabase = new TreeMap<>();
+        final Map<Integer, Vendor> vendorDatabase = new TreeMap<>();
+        final Map<Integer, DeviceClass> deviceClassDatabase = new TreeMap<>();
 
         DatabaseFileParser instance = new DatabaseFileParser();
         try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(new XZInputStream(this.getClass().getResourceAsStream("pci.ids.xz")), StandardCharsets.UTF_8))) {
+                new InputStreamReader(new XZInputStream(this.getClass().getResourceAsStream("../pci.ids.xz")), StandardCharsets.UTF_8))) {
             instance.parseDatabaseFile(reader, vendorDatabase, deviceClassDatabase);
         }
 
@@ -138,7 +138,7 @@ public class DatabaseFileParserTest {
         DatabaseFileParser instance = new DatabaseFileParser();
         Vendor result = instance.parseVendorLine(line);
 
-        assertEquals("0059", result.getId());
+        assertEquals(0x0059, result.getId());
         assertEquals("Tiger Jet Network Inc. (Wrong ID)", result.getName());
     }
 
@@ -176,7 +176,7 @@ public class DatabaseFileParserTest {
         DatabaseFileParser instance = new DatabaseFileParser();
         Device result = instance.parseDeviceLine(line);
 
-        assertEquals("7801", result.getId());
+        assertEquals(0x7801, result.getId());
         assertEquals("WinTV HVR-1800 MCE", result.getName());
     }
 
@@ -222,8 +222,8 @@ public class DatabaseFileParserTest {
         DatabaseFileParser instance = new DatabaseFileParser();
         Subsystem result = instance.parseSubsystemLine(line);
 
-        assertEquals("001c", result.getVendorId());
-        assertEquals("0004", result.getId());
+        assertEquals(0x001c, result.getVendorId());
+        assertEquals(0x0004, result.getId());
         assertEquals("2 Channel CAN Bus SJC1000", result.getName());
     }
 
@@ -285,7 +285,7 @@ public class DatabaseFileParserTest {
         DatabaseFileParser instance = new DatabaseFileParser();
         DeviceClass result = instance.parseDeviceClassLine(line);
 
-        assertEquals("00", result.getId());
+        assertEquals(0x00, result.getId());
         assertEquals("Unclassified device", result.getName());
         assertNull(result.getComment());
     }
@@ -332,7 +332,7 @@ public class DatabaseFileParserTest {
         DatabaseFileParser instance = new DatabaseFileParser();
         DeviceSubclass result = instance.parseDeviceSubclassLine(line);
 
-        assertEquals("00", result.getId());
+        assertEquals(0x00, result.getId());
         assertEquals("Non-VGA unclassified device", result.getName());
         assertNull(result.getComment());
     }
@@ -379,7 +379,7 @@ public class DatabaseFileParserTest {
         DatabaseFileParser instance = new DatabaseFileParser();
         ProgramInterface result = instance.parseProgramInterfaceLine(line);
 
-        assertEquals("20", result.getId());
+        assertEquals(0x20, result.getId());
         assertEquals("ADMA single stepping", result.getName());
         assertNull(result.getComment());
     }

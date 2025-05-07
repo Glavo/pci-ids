@@ -33,21 +33,16 @@ import java.util.Objects;
 public final class DeviceSubclass implements Comparable<DeviceSubclass> {
 
     /**
-     * String representation of the unique 8 Bit ID.
+     * Unique 8 Bit ID.
      */
-    private final String id;
+    private final Integer id;
     private final String name;
     private final String comment;
 
     /**
      * Internal set of program interfaces belonging to this device class.
      */
-    private final Map<String, ProgramInterface> programInterfaces;
-
-    /**
-     * Integer representation of the unique 8 Bit ID. For internal use only.
-     */
-    private final Integer numericId;
+    private final Map<Integer, ProgramInterface> programInterfaces;
 
     /**
      * Create a new Device Subclass database entry.
@@ -56,16 +51,14 @@ public final class DeviceSubclass implements Comparable<DeviceSubclass> {
      * @param name    Full name of the device subclass
      * @param comment Optional comment, may be null
      */
-    public DeviceSubclass(String id, String name, String comment) {
-        ArgumentValidator.requireStringLength(id, 2, ArgumentValidator.NumberCompare.EQUAL, "Device subclass ID");
+    public DeviceSubclass(int id, String name, String comment) {
+        ArgumentValidator.requireUnsignedByte(id, "Device subclass ID");
         ArgumentValidator.requireNonBlank(name, "Device subclass name");
 
         this.id = id;
         this.name = name;
         this.comment = comment;
         this.programInterfaces = new HashMap<>();
-
-        this.numericId = Integer.parseInt(id, 16);
     }
 
     /**
@@ -79,7 +72,7 @@ public final class DeviceSubclass implements Comparable<DeviceSubclass> {
         this.programInterfaces.put(iface.getId(), iface);
     }
 
-    public String getId() {
+    public int getId() {
         return this.id;
     }
 
@@ -96,7 +89,7 @@ public final class DeviceSubclass implements Comparable<DeviceSubclass> {
      *
      * @return Unmodifiable map view
      */
-    public Map<String, ProgramInterface> getProgramInterfaces() {
+    public Map<Integer, ProgramInterface> getProgramInterfaces() {
         return Collections.unmodifiableMap(this.programInterfaces);
     }
 
@@ -109,7 +102,7 @@ public final class DeviceSubclass implements Comparable<DeviceSubclass> {
      */
     @Override
     public int compareTo(DeviceSubclass t) {
-        return Integer.compare(this.numericId, t.numericId);
+        return Integer.compare(this.id, t.id);
     }
 
     @Override
@@ -125,7 +118,6 @@ public final class DeviceSubclass implements Comparable<DeviceSubclass> {
     }
 
     public String toString() {
-        return String.format("DeviceSubclass[id=%s, name=%s, comment=%s, programInterfaces=%s, numericId=%d]",
-                this.getId(), this.getName(), this.getComment(), this.getProgramInterfaces(), this.numericId);
+        return String.format("DeviceSubclass[id=%02x, name='%s']", this.getId(), this.getName());
     }
 }

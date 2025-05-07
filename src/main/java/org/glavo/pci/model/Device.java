@@ -33,9 +33,9 @@ import org.glavo.pci.internal.ArgumentValidator;
 public final class Device implements Comparable<Device> {
 
     /**
-     * String representation of the unique 16 Bit ID.
+     * Unique 16 Bit ID
      */
-    private final String id;
+    private final int id;
     private final String name;
     private final String comment;
 
@@ -45,30 +45,23 @@ public final class Device implements Comparable<Device> {
     private final Set<Subsystem> subsystems;
 
     /**
-     * Integer representation of the unique 16 Bit ID. For internal use only.
-     */
-    private final int numericId;
-
-    /**
      * Create a new Device database entry.
      *
      * @param id      Unique 16 Bit ID
      * @param name    Full name of the device
      * @param comment Optional comment, may be null
      */
-    public Device(String id, String name, String comment) {
-        ArgumentValidator.requireStringLength(id, 4, ArgumentValidator.NumberCompare.EQUAL, "Device ID");
+    public Device(int id, String name, String comment) {
+        ArgumentValidator.requireUnsignedShort(id, "Device ID");
         ArgumentValidator.requireNonBlank(name, "Device name");
 
         this.id = id;
         this.name = name;
         this.comment = comment;
         this.subsystems = new HashSet<>();
-
-        this.numericId = Integer.parseInt(id, 16);
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
@@ -109,7 +102,12 @@ public final class Device implements Comparable<Device> {
      */
     @Override
     public int compareTo(Device t) {
-        return Integer.compare(this.numericId, t.numericId);
+        return Integer.compare(this.id, t.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
     }
 
     @Override
@@ -120,7 +118,7 @@ public final class Device implements Comparable<Device> {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, name);
+    public String toString() {
+        return String.format("Device[id=%04x, name='%s']", id, name);
     }
 }

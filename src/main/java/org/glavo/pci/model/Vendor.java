@@ -32,21 +32,16 @@ import org.glavo.pci.internal.ArgumentValidator;
 public final class Vendor implements Comparable<Vendor> {
 
     /**
-     * String representation of the unique 16 Bit ID.
+     * Unique 16 Bit ID.
      */
-    private final String id;
+    private final int id;
     private final String name;
     private final String comment;
 
     /**
      * Internal map of devices belonging to this vendor. Identified by their unique 16 Bit ID.
      */
-    private final Map<String, Device> devices;
-
-    /**
-     * Integer representation of the unique 16 Bit ID. For internal use only.
-     */
-    private final int numericId;
+    private final Map<Integer, Device> devices;
 
     /**
      * Create a new Vendor database entry.
@@ -55,19 +50,17 @@ public final class Vendor implements Comparable<Vendor> {
      * @param name    Full name of the vendor
      * @param comment Optional comment, may be null
      */
-    public Vendor(String id, String name, String comment) {
-        ArgumentValidator.requireStringLength(id, 4, ArgumentValidator.NumberCompare.EQUAL, "Vendor ID");
+    public Vendor(int id, String name, String comment) {
+        ArgumentValidator.requireUnsignedShort(id, "Vendor ID");
         ArgumentValidator.requireNonBlank(name, "Vendor name");
 
         this.id = id;
         this.name = name;
         this.comment = comment;
         this.devices = new HashMap<>();
-
-        this.numericId = Integer.parseInt(id, 16);
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
@@ -95,7 +88,7 @@ public final class Vendor implements Comparable<Vendor> {
      *
      * @return Unmodifiable map view
      */
-    public Map<String, Device> getDevices() {
+    public Map<Integer, Device> getDevices() {
         return Collections.unmodifiableMap(this.devices);
     }
 
@@ -108,7 +101,7 @@ public final class Vendor implements Comparable<Vendor> {
      */
     @Override
     public int compareTo(Vendor t) {
-        return Integer.compare(this.numericId, t.numericId);
+        return Integer.compare(this.id, t.id);
     }
 
     @Override
@@ -125,6 +118,6 @@ public final class Vendor implements Comparable<Vendor> {
 
     @Override
     public String toString() {
-        return String.format("Vendor[id='%s', name='%s', comment='%s', devices=%s, numericId=%d]", id, name, comment, devices, numericId);
+        return String.format("Vendor[id=%04x, name='%s']", id, name);
     }
 }

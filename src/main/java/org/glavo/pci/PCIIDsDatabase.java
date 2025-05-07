@@ -22,6 +22,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -64,8 +65,8 @@ public final class PCIIDsDatabase {
         return database;
     }
 
-    private final Map<String, Vendor> vendorDatabase;
-    private final Map<String, DeviceClass> deviceClassDatabase;
+    private final Map<Integer, Vendor> vendorDatabase;
+    private final Map<Integer, DeviceClass> deviceClassDatabase;
 
     /**
      * Create a new empty database
@@ -84,9 +85,7 @@ public final class PCIIDsDatabase {
      * @since 0.1
      */
     public List<Vendor> findAllVendors() {
-        return this.vendorDatabase.values().stream()
-                .sorted()
-                .collect(Collectors.toList());
+        return new ArrayList<>(this.vendorDatabase.values());
     }
 
     /**
@@ -98,7 +97,7 @@ public final class PCIIDsDatabase {
      * @throws IllegalStateException if database is not ready, i.e. no database file was loaded
      * @since 0.1
      */
-    public Vendor findVendor(String vendorId) {
+    public Vendor findVendor(int vendorId) {
         return this.vendorDatabase.get(vendorId);
     }
 
@@ -111,7 +110,7 @@ public final class PCIIDsDatabase {
      * @throws IllegalStateException if database is not ready, i.e. no database file was loaded
      * @since 0.1
      */
-    public List<Device> findAllDevices(final String vendorId) {
+    public List<Device> findAllDevices(final int vendorId) {
         Vendor v = this.vendorDatabase.get(vendorId);
         if (v == null) {
             return Collections.emptyList();
@@ -132,7 +131,7 @@ public final class PCIIDsDatabase {
      * @throws IllegalStateException if database is not ready, i.e. no database file was loaded
      * @since 0.1
      */
-    public Device findDevice(final String vendorId, final String deviceId) {
+    public Device findDevice(final int vendorId, final int deviceId) {
         Vendor v = this.vendorDatabase.get(vendorId);
         if (v == null) {
             return null;
@@ -152,7 +151,7 @@ public final class PCIIDsDatabase {
      * @throws IllegalStateException if database is not ready, i.e. no database file was loaded
      * @since 0.1
      */
-    public List<Subsystem> findAllSubsystems(final String vendorId, final String deviceId) {
+    public List<Subsystem> findAllSubsystems(final int vendorId, final int deviceId) {
         Vendor v = this.vendorDatabase.get(vendorId);
         if (v == null) {
             return Collections.emptyList();
@@ -181,7 +180,7 @@ public final class PCIIDsDatabase {
      * @throws IllegalStateException if database is not ready, i.e. no database file was loaded
      * @since 0.1
      */
-    public List<Subsystem> findAllSubsystemsWithVendor(final String vendorId, final String deviceId, final String subvendorId) {
+    public List<Subsystem> findAllSubsystemsWithVendor(final int vendorId, final int deviceId, final int subvendorId) {
         Vendor v = this.vendorDatabase.get(vendorId);
         if (v == null) {
             return Collections.emptyList();
@@ -193,7 +192,7 @@ public final class PCIIDsDatabase {
         }
 
         return d.getSubsystems().stream()
-                .filter(s -> s.getVendorId().equals(subvendorId))
+                .filter(s -> s.getVendorId() == subvendorId)
                 .sorted()
                 .collect(Collectors.toList());
     }
@@ -221,7 +220,7 @@ public final class PCIIDsDatabase {
      * @throws IllegalStateException if database is not ready, i.e. no database file was loaded
      * @since 0.3
      */
-    public DeviceClass findDeviceClass(String classId) {
+    public DeviceClass findDeviceClass(final int classId) {
         return this.deviceClassDatabase.get(classId);
     }
 
@@ -234,7 +233,7 @@ public final class PCIIDsDatabase {
      * @throws IllegalStateException if database is not ready, i.e. no database file was loaded
      * @since 0.3
      */
-    public List<DeviceSubclass> findAllDeviceSubclasses(String classId) {
+    public List<DeviceSubclass> findAllDeviceSubclasses(final int classId) {
         DeviceClass d = this.deviceClassDatabase.get(classId);
         if (d == null) {
             return Collections.emptyList();
@@ -255,7 +254,7 @@ public final class PCIIDsDatabase {
      * @throws IllegalStateException if database is not ready, i.e. no database file was loaded
      * @since 0.3
      */
-    public DeviceSubclass findDeviceSubclass(String classId, String subclassId) {
+    public DeviceSubclass findDeviceSubclass(final int classId, final int subclassId) {
         DeviceClass d = this.deviceClassDatabase.get(classId);
         return d != null ? d.getSubclasses().get(subclassId) : null;
     }
@@ -271,7 +270,7 @@ public final class PCIIDsDatabase {
      * @throws IllegalStateException if database is not ready, i.e. no database file was loaded
      * @since 0.3
      */
-    public List<ProgramInterface> findAllProgramInterfaces(String classId, String subclassId) {
+    public List<ProgramInterface> findAllProgramInterfaces(final int classId, final int subclassId) {
         DeviceClass d = this.deviceClassDatabase.get(classId);
         if (d == null) {
             return Collections.emptyList();
@@ -298,7 +297,7 @@ public final class PCIIDsDatabase {
      * @throws IllegalStateException if database is not ready, i.e. no database file was loaded
      * @since 0.3
      */
-    public ProgramInterface findProgramInterface(String classId, String subclassId, String ifaceId) {
+    public ProgramInterface findProgramInterface(final int classId, final int subclassId, final int ifaceId) {
         DeviceClass d = this.deviceClassDatabase.get(classId);
         if (d == null) {
             return null;

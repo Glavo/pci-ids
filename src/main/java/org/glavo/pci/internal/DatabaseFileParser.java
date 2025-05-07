@@ -17,8 +17,6 @@ package org.glavo.pci.internal;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -89,7 +87,7 @@ public final class DatabaseFileParser {
      * @param deviceClassDb Database map to fill with DeviceClass objects
      * @throws IOException if the database file is malformed or otherwise unprocessable
      */
-    public void parseDatabaseFile(BufferedReader reader, final Map<String, Vendor> vendorDb, Map<String, DeviceClass> deviceClassDb) throws IOException {
+    public void parseDatabaseFile(BufferedReader reader, final Map<Integer, Vendor> vendorDb, Map<Integer, DeviceClass> deviceClassDb) throws IOException {
         ArgumentValidator.requireNonNull(reader, "PCI IDs database InputStream");
 
         try {
@@ -229,7 +227,7 @@ public final class DatabaseFileParser {
         Matcher m = this.VENDOR_PATTERN.matcher(line);
 
         if (m.matches()) {
-            String id = m.group(1);
+            int id = Integer.parseInt(m.group(1), 16);
             String name = m.group(2);
 
             Vendor rv = new Vendor(id, name, this.currentComment);
@@ -253,7 +251,7 @@ public final class DatabaseFileParser {
         Matcher m = this.DEVICE_PATTERN.matcher(line);
 
         if (m.matches()) {
-            String id = m.group(1);
+            int id = Integer.parseInt(m.group(1), 16);
             String name = m.group(2);
 
             Device rv = new Device(id, name, this.currentComment);
@@ -277,9 +275,9 @@ public final class DatabaseFileParser {
         Matcher m = this.SUBSYS_PATTERN.matcher(line);
 
         if (m.matches()) {
-            String id = m.group(2);
+            int id = Integer.parseInt(m.group(2), 16);
             String name = m.group(3);
-            String vendorId = m.group(1);
+            int vendorId = Integer.parseInt(m.group(1), 16);
 
             Subsystem rv = new Subsystem(id, name, this.currentComment, vendorId);
             this.currentComment = null;
@@ -302,7 +300,7 @@ public final class DatabaseFileParser {
         Matcher m = this.DEVCLASS_PATTERN.matcher(line);
 
         if (m.matches()) {
-            String id = m.group(1);
+            int id = Integer.parseInt(m.group(1), 16);
             String name = m.group(2);
 
             DeviceClass rv = new DeviceClass(id, name, this.currentComment);
@@ -326,7 +324,7 @@ public final class DatabaseFileParser {
         Matcher m = this.SUBCLASS_PATTERN.matcher(line);
 
         if (m.matches()) {
-            String id = m.group(1);
+            int id = Integer.parseInt(m.group(1), 16);
             String name = m.group(2);
 
             DeviceSubclass rv = new DeviceSubclass(id, name, this.currentComment);
@@ -353,7 +351,7 @@ public final class DatabaseFileParser {
             String id = m.group(1);
             String name = m.group(2);
 
-            ProgramInterface rv = new ProgramInterface(id, name, this.currentComment);
+            ProgramInterface rv = new ProgramInterface(Integer.parseInt(id, 16), name, this.currentComment);
             this.currentComment = null;
 
             return rv;
@@ -412,7 +410,7 @@ public final class DatabaseFileParser {
     /**
      * Possible line types found in the PCI IDs database file.
      */
-    protected static enum LineType {
+    enum LineType {
         COMMENT,
         DEVICE,
         DEVICE_CLASS,

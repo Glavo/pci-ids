@@ -44,21 +44,21 @@ import org.glavo.pci.model.Vendor;
  * @see <a href="https://pci-ids.ucw.cz/">The PCI ID Repository</a>
  * @since 0.1
  */
-public final class PciIdsDatabase {
+public final class PCIIDsDatabase {
 
-    public static PciIdsDatabase load(Path path) throws IOException {
+    public static PCIIDsDatabase load(Path path) throws IOException {
         try (BufferedReader reader = Files.newBufferedReader(path)) {
             return load(reader);
         }
     }
 
-    public static PciIdsDatabase load(InputStream inputStream) throws IOException {
+    public static PCIIDsDatabase load(InputStream inputStream) throws IOException {
         return load(new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8)));
     }
 
-    public static PciIdsDatabase load(BufferedReader reader) throws IOException {
+    public static PCIIDsDatabase load(BufferedReader reader) throws IOException {
         ArgumentValidator.requireNonNull(reader, "PCI IDs database reader");
-        PciIdsDatabase database = new PciIdsDatabase();
+        PCIIDsDatabase database = new PCIIDsDatabase();
         DatabaseFileParser parser = new DatabaseFileParser();
         parser.parseDatabaseFile(reader, database.vendorDatabase, database.deviceClassDatabase);
         return database;
@@ -70,7 +70,7 @@ public final class PciIdsDatabase {
     /**
      * Create a new empty database
      */
-    private PciIdsDatabase() {
+    private PCIIDsDatabase() {
         this.vendorDatabase = new TreeMap<>();
         this.deviceClassDatabase = new TreeMap<>();
     }

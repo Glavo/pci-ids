@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.junit.jupiter.api.Test;
+import org.tukaani.xz.XZInputStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -40,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class DatabaseFileParserTest {
 
     @Test
-    public void testParseDatabaseFile() throws Exception {
+    public void testParseSimpleDatabaseFile() throws Exception {
         final Map<String, Vendor> vendorDatabase = new TreeMap<>();
         final Map<String, DeviceClass> deviceClassDatabase = new TreeMap<>();
 
@@ -111,6 +112,20 @@ public class DatabaseFileParserTest {
         assertEquals("30", pi2.getId());
         assertEquals("ADMA continuous operation", pi2.getName());
         assertNull(pi2.getComment());
+    }
+
+    @Test
+    public void testParseRealWorldDatabaseFile() throws Exception {
+        final Map<String, Vendor> vendorDatabase = new TreeMap<>();
+        final Map<String, DeviceClass> deviceClassDatabase = new TreeMap<>();
+
+        DatabaseFileParser instance = new DatabaseFileParser();
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(new XZInputStream(this.getClass().getResourceAsStream("pci.ids.xz")), StandardCharsets.UTF_8))) {
+            instance.parseDatabaseFile(reader, vendorDatabase, deviceClassDatabase);
+        }
+
+        // TODO
     }
 
     //

@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.glavo.pci;
+package org.glavo.pci.ids;
 
-import org.glavo.pci.model.Device;
-import org.glavo.pci.model.Vendor;
+import org.glavo.pci.ids.model.Device;
+import org.glavo.pci.ids.model.Vendor;
 import org.junit.jupiter.api.Test;
 import org.tukaani.xz.XZInputStream;
 

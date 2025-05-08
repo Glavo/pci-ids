@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.glavo.pci.internal;
+package org.glavo.pci.ids.internal;
 
 import java.util.Objects;
 

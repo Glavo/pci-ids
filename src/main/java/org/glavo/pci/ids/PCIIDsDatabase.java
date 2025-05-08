@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.glavo.pci;
+package org.glavo.pci.ids;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,19 +25,18 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
-import org.glavo.pci.internal.ArgumentValidator;
-import org.glavo.pci.internal.DatabaseFileParser;
-import org.glavo.pci.model.Device;
-import org.glavo.pci.model.DeviceClass;
-import org.glavo.pci.model.DeviceSubclass;
-import org.glavo.pci.model.ProgramInterface;
-import org.glavo.pci.model.Subsystem;
-import org.glavo.pci.model.Vendor;
+import org.glavo.pci.ids.internal.ArgumentValidator;
+import org.glavo.pci.ids.internal.DatabaseFileParser;
+import org.glavo.pci.ids.model.Device;
+import org.glavo.pci.ids.model.DeviceClass;
+import org.glavo.pci.ids.model.DeviceSubclass;
+import org.glavo.pci.ids.model.ProgramInterface;
+import org.glavo.pci.ids.model.Subsystem;
+import org.glavo.pci.ids.model.Vendor;
 
 /**
  * Main entry point into the PCI IDs database library.

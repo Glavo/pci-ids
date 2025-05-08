@@ -13,19 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.glavo.pci.internal;
+package org.glavo.pci.ids.internal;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.glavo.pci.model.Device;
-import org.glavo.pci.model.DeviceClass;
-import org.glavo.pci.model.DeviceSubclass;
-import org.glavo.pci.model.ProgramInterface;
-import org.glavo.pci.model.Subsystem;
-import org.glavo.pci.model.Vendor;
+import org.glavo.pci.ids.model.Device;
+import org.glavo.pci.ids.model.DeviceClass;
+import org.glavo.pci.ids.model.DeviceSubclass;
+import org.glavo.pci.ids.model.ProgramInterface;
+import org.glavo.pci.ids.model.Subsystem;
+import org.glavo.pci.ids.model.Vendor;
 
 import java.util.Map;
 

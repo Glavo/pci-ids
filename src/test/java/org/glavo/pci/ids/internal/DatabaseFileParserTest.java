@@ -1,11 +1,11 @@
 /*
- * Copyright 2017 Thomas Rix.
+ * Copyright 2025 Glavo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.glavo.pci.internal;
+package org.glavo.pci.ids.internal;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 
-import org.glavo.pci.model.Device;
-import org.glavo.pci.model.DeviceClass;
-import org.glavo.pci.model.DeviceSubclass;
-import org.glavo.pci.model.ProgramInterface;
-import org.glavo.pci.model.Subsystem;
-import org.glavo.pci.model.Vendor;
+import org.glavo.pci.ids.model.Device;
+import org.glavo.pci.ids.model.DeviceClass;
+import org.glavo.pci.ids.model.DeviceSubclass;
+import org.glavo.pci.ids.model.ProgramInterface;
+import org.glavo.pci.ids.model.Subsystem;
+import org.glavo.pci.ids.model.Vendor;
 
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;

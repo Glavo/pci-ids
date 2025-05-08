@@ -1,11 +1,11 @@
 /*
- * Copyright 2017 Thomas Rix.
+ * Copyright 2025 Glavo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,16 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.glavo.pci.model;
+package org.glavo.pci.ids.model;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.glavo.pci.internal.ArgumentValidator;
+import org.glavo.pci.ids.internal.ArgumentValidator;
 
 /**
  * Java representation of a PCI device. Each device has a 16 Bit ID, which is unique in the scope of

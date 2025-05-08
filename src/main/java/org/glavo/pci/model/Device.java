@@ -19,6 +19,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.glavo.pci.internal.ArgumentValidator;
 
@@ -42,7 +44,7 @@ public final class Device implements Comparable<Device> {
     /**
      * Internal set of subsystems belonging to this device.
      */
-    private final Set<Subsystem> subsystems;
+    private final SortedSet<Subsystem> subsystems;
 
     /**
      * Create a new Device database entry.
@@ -58,7 +60,7 @@ public final class Device implements Comparable<Device> {
         this.id = id;
         this.name = name;
         this.comment = comment;
-        this.subsystems = new HashSet<>();
+        this.subsystems = new TreeSet<>();
     }
 
     public int getId() {
@@ -89,8 +91,8 @@ public final class Device implements Comparable<Device> {
      *
      * @return Unmodifiable set view
      */
-    public Set<Subsystem> getSubsystems() {
-        return Collections.unmodifiableSet(this.subsystems);
+    public SortedSet<Subsystem> getSubsystems() {
+        return Collections.unmodifiableSortedSet(this.subsystems);
     }
 
     /**

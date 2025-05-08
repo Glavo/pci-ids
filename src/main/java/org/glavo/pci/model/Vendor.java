@@ -19,6 +19,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.glavo.pci.internal.ArgumentValidator;
 
@@ -41,7 +43,7 @@ public final class Vendor implements Comparable<Vendor> {
     /**
      * Internal map of devices belonging to this vendor. Identified by their unique 16 Bit ID.
      */
-    private final Map<Integer, Device> devices;
+    private final SortedMap<Integer, Device> devices;
 
     /**
      * Create a new Vendor database entry.
@@ -57,7 +59,7 @@ public final class Vendor implements Comparable<Vendor> {
         this.id = id;
         this.name = name;
         this.comment = comment;
-        this.devices = new HashMap<>();
+        this.devices = new TreeMap<>();
     }
 
     public int getId() {
@@ -88,8 +90,8 @@ public final class Vendor implements Comparable<Vendor> {
      *
      * @return Unmodifiable map view
      */
-    public Map<Integer, Device> getDevices() {
-        return Collections.unmodifiableMap(this.devices);
+    public SortedMap<Integer, Device> getDevices() {
+        return Collections.unmodifiableSortedMap(devices);
     }
 
     /**

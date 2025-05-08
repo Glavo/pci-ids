@@ -21,6 +21,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 /**
  * Java representation of a PCI device subclass. Each subclass has an 8 Bit ID, which is unique in
@@ -42,7 +44,7 @@ public final class DeviceSubclass implements Comparable<DeviceSubclass> {
     /**
      * Internal set of program interfaces belonging to this device class.
      */
-    private final Map<Integer, ProgramInterface> programInterfaces;
+    private final SortedMap<Integer, ProgramInterface> programInterfaces;
 
     /**
      * Create a new Device Subclass database entry.
@@ -58,7 +60,7 @@ public final class DeviceSubclass implements Comparable<DeviceSubclass> {
         this.id = id;
         this.name = name;
         this.comment = comment;
-        this.programInterfaces = new HashMap<>();
+        this.programInterfaces = new TreeMap<>();
     }
 
     /**
@@ -89,8 +91,8 @@ public final class DeviceSubclass implements Comparable<DeviceSubclass> {
      *
      * @return Unmodifiable map view
      */
-    public Map<Integer, ProgramInterface> getProgramInterfaces() {
-        return Collections.unmodifiableMap(this.programInterfaces);
+    public SortedMap<Integer, ProgramInterface> getProgramInterfaces() {
+        return Collections.unmodifiableSortedMap(this.programInterfaces);
     }
 
     /**

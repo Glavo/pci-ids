@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -65,8 +66,8 @@ public final class PCIIDsDatabase {
         return database;
     }
 
-    private final Map<Integer, Vendor> vendorDatabase;
-    private final Map<Integer, DeviceClass> deviceClassDatabase;
+    private final SortedMap<Integer, Vendor> vendorDatabase;
+    private final SortedMap<Integer, DeviceClass> deviceClassDatabase;
 
     /**
      * Create a new empty database
@@ -97,7 +98,7 @@ public final class PCIIDsDatabase {
      * @throws IllegalStateException if database is not ready, i.e. no database file was loaded
      * @since 0.1
      */
-    public Vendor findVendor(int vendorId) {
+    public Vendor findVendor(final int vendorId) {
         return this.vendorDatabase.get(vendorId);
     }
 
@@ -116,9 +117,7 @@ public final class PCIIDsDatabase {
             return Collections.emptyList();
         }
 
-        return v.getDevices().values().stream()
-                .sorted()
-                .collect(Collectors.toList());
+        return new ArrayList<>(v.getDevices().values());
     }
 
     /**
@@ -162,9 +161,7 @@ public final class PCIIDsDatabase {
             return Collections.emptyList();
         }
 
-        return d.getSubsystems().stream()
-                .sorted()
-                .collect(Collectors.toList());
+        return new ArrayList<>(d.getSubsystems());
     }
 
     /**
@@ -206,9 +203,7 @@ public final class PCIIDsDatabase {
      * @since 0.3
      */
     public List<DeviceClass> findAllDeviceClasses() {
-        return this.deviceClassDatabase.values().stream()
-                .sorted()
-                .collect(Collectors.toList());
+        return new ArrayList<>(this.deviceClassDatabase.values());
     }
 
     /**
@@ -239,9 +234,7 @@ public final class PCIIDsDatabase {
             return Collections.emptyList();
         }
 
-        return d.getSubclasses().values().stream()
-                .sorted()
-                .collect(Collectors.toList());
+        return new ArrayList<>(d.getSubclasses().values());
     }
 
     /**
@@ -281,9 +274,7 @@ public final class PCIIDsDatabase {
             return Collections.emptyList();
         }
 
-        return s.getProgramInterfaces().values().stream()
-                .sorted()
-                .collect(Collectors.toList());
+        return new ArrayList<>(s.getProgramInterfaces().values());
     }
 
     /**

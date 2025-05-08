@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.TreeMap;
 
 /**
  * Java representation of a PCI device class. Each class has an 8 Bit unique ID, represented by two
@@ -42,7 +43,7 @@ public final class DeviceClass implements Comparable<DeviceClass> {
      * Internal map of subclasses belonging to this device class. Identified by their unique 8 Bit
      * ID.
      */
-    private final Map<Integer, DeviceSubclass> subclasses;
+    private final TreeMap<Integer, DeviceSubclass> subclasses;
 
 
     /**
@@ -59,7 +60,7 @@ public final class DeviceClass implements Comparable<DeviceClass> {
         this.id = id;
         this.name = name;
         this.comment = comment;
-        this.subclasses = new HashMap<>();
+        this.subclasses = new TreeMap<>();
 
     }
 

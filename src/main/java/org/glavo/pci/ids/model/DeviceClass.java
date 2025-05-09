@@ -20,6 +20,7 @@ import org.glavo.pci.ids.internal.ArgumentValidator;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 /**
@@ -42,7 +43,7 @@ public final class DeviceClass implements Comparable<DeviceClass> {
      * Internal map of subclasses belonging to this device class. Identified by their unique 8 Bit
      * ID.
      */
-    private final TreeMap<Integer, DeviceSubclass> subclasses;
+    private TreeMap<Integer, DeviceSubclass> subclasses;
 
 
     /**
@@ -59,8 +60,6 @@ public final class DeviceClass implements Comparable<DeviceClass> {
         this.id = id;
         this.name = name;
         this.comment = comment;
-        this.subclasses = new TreeMap<>();
-
     }
 
     /**
@@ -71,6 +70,9 @@ public final class DeviceClass implements Comparable<DeviceClass> {
     void addSubclass(DeviceSubclass subclass) {
         ArgumentValidator.requireNonNull(subclass, "Device subclass");
 
+        if (this.subclasses == null) {
+            this.subclasses = new TreeMap<>();
+        }
         this.subclasses.put(subclass.getId(), subclass);
     }
 
@@ -91,8 +93,8 @@ public final class DeviceClass implements Comparable<DeviceClass> {
      *
      * @return Unmodifiable map view
      */
-    public Map<Integer, DeviceSubclass> getSubclasses() {
-        return Collections.unmodifiableMap(this.subclasses);
+    public SortedMap<Integer, DeviceSubclass> getSubclasses() {
+        return this.subclasses != null ? Collections.unmodifiableSortedMap(this.subclasses) : Collections.emptySortedMap();
     }
 
     /**
@@ -110,13 +112,12 @@ public final class DeviceClass implements Comparable<DeviceClass> {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof DeviceClass)) return false;
-        DeviceClass that = (DeviceClass) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name);
+        return this.id == ((DeviceClass) o).id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return this.id;
     }
 
     public String toString() {

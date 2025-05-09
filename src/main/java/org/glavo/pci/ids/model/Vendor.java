@@ -41,7 +41,7 @@ public final class Vendor implements Comparable<Vendor> {
     /**
      * Internal map of devices belonging to this vendor. Identified by their unique 16 Bit ID.
      */
-    private final SortedMap<Integer, Device> devices;
+    private SortedMap<Integer, Device> devices = null;
 
     /**
      * Create a new Vendor database entry.
@@ -57,7 +57,6 @@ public final class Vendor implements Comparable<Vendor> {
         this.id = id;
         this.name = name;
         this.comment = comment;
-        this.devices = new TreeMap<>();
     }
 
     public int getId() {
@@ -80,6 +79,9 @@ public final class Vendor implements Comparable<Vendor> {
     void addDevice(Device device) {
         ArgumentValidator.requireNonNull(device, "Vendor device");
 
+        if (this.devices == null) {
+            this.devices = new TreeMap<>();
+        }
         this.devices.put(device.getId(), device);
     }
 
@@ -89,7 +91,7 @@ public final class Vendor implements Comparable<Vendor> {
      * @return Unmodifiable map view
      */
     public SortedMap<Integer, Device> getDevices() {
-        return Collections.unmodifiableSortedMap(devices);
+        return this.devices != null ? Collections.unmodifiableSortedMap(this.devices) : Collections.emptySortedMap();
     }
 
     /**

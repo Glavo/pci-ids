@@ -79,13 +79,12 @@ public final class ProgramInterface implements Comparable<ProgramInterface> {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof ProgramInterface)) return false;
-        ProgramInterface that = (ProgramInterface) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name);
+        return id == ((ProgramInterface) o).id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return id;
     }
 
     public String toString() {

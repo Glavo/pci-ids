@@ -35,14 +35,14 @@ public final class DeviceSubclass implements Comparable<DeviceSubclass> {
     /**
      * Unique 8 Bit ID.
      */
-    private final Integer id;
+    private final int id;
     private final String name;
     private final String comment;
 
     /**
      * Internal set of program interfaces belonging to this device class.
      */
-    private final SortedMap<Integer, ProgramInterface> programInterfaces;
+    private SortedMap<Integer, ProgramInterface> programInterfaces;
 
     /**
      * Create a new Device Subclass database entry.
@@ -58,7 +58,6 @@ public final class DeviceSubclass implements Comparable<DeviceSubclass> {
         this.id = id;
         this.name = name;
         this.comment = comment;
-        this.programInterfaces = new TreeMap<>();
     }
 
     /**
@@ -68,6 +67,10 @@ public final class DeviceSubclass implements Comparable<DeviceSubclass> {
      */
     void addProgramInterface(ProgramInterface iface) {
         ArgumentValidator.requireNonNull(iface, "Device subclass program interface");
+
+        if (this.programInterfaces == null) {
+            this.programInterfaces = new TreeMap<>();
+        }
 
         this.programInterfaces.put(iface.getId(), iface);
     }
@@ -90,7 +93,7 @@ public final class DeviceSubclass implements Comparable<DeviceSubclass> {
      * @return Unmodifiable map view
      */
     public SortedMap<Integer, ProgramInterface> getProgramInterfaces() {
-        return Collections.unmodifiableSortedMap(this.programInterfaces);
+        return this.programInterfaces != null ? Collections.unmodifiableSortedMap(this.programInterfaces) : Collections.emptySortedMap();
     }
 
     /**
@@ -108,13 +111,12 @@ public final class DeviceSubclass implements Comparable<DeviceSubclass> {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof DeviceSubclass)) return false;
-        DeviceSubclass that = (DeviceSubclass) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name);
+        return this.id == ((DeviceSubclass) o).id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return this.id;
     }
 
     public String toString() {

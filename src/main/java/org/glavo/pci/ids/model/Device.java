@@ -42,7 +42,7 @@ public final class Device implements Comparable<Device> {
     /**
      * Internal set of subsystems belonging to this device.
      */
-    private final SortedSet<Subsystem> subsystems;
+    private SortedSet<Subsystem> subsystems;
 
     /**
      * Create a new Device database entry.
@@ -58,7 +58,6 @@ public final class Device implements Comparable<Device> {
         this.id = id;
         this.name = name;
         this.comment = comment;
-        this.subsystems = new TreeSet<>();
     }
 
     public int getId() {
@@ -81,6 +80,9 @@ public final class Device implements Comparable<Device> {
     void addSubsystem(Subsystem subsys) {
         ArgumentValidator.requireNonNull(subsys, "Device subsystem");
 
+        if (this.subsystems == null) {
+            this.subsystems = new TreeSet<>();
+        }
         this.subsystems.add(subsys);
     }
 
@@ -90,7 +92,7 @@ public final class Device implements Comparable<Device> {
      * @return Unmodifiable set view
      */
     public SortedSet<Subsystem> getSubsystems() {
-        return Collections.unmodifiableSortedSet(this.subsystems);
+        return this.subsystems != null ? Collections.unmodifiableSortedSet(this.subsystems) : Collections.emptySortedSet();
     }
 
     /**
@@ -106,15 +108,14 @@ public final class Device implements Comparable<Device> {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, name);
+    public boolean equals(Object o) {
+        if (!(o instanceof Device)) return false;
+        return this.id == ((Device) o).id;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Device)) return false;
-        Device device = (Device) o;
-        return Objects.equals(id, device.id) && Objects.equals(name, device.name);
+    public int hashCode() {
+        return this.id;
     }
 
     @Override

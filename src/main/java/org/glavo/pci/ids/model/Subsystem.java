@@ -87,23 +87,21 @@ public final class Subsystem implements Comparable<Subsystem> {
      */
     @Override
     public int compareTo(Subsystem t) {
-        if (this.vendorId == t.vendorId) {
-            return Integer.compare(this.id, t.id);
-        }
-
-        return Integer.compare(this.vendorId, t.vendorId);
+        return this.vendorId != t.vendorId
+                ? Integer.compare(this.vendorId, t.vendorId)
+                : Integer.compare(this.id, t.id);
     }
 
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Subsystem)) return false;
-        Subsystem subsystem = (Subsystem) o;
-        return Objects.equals(id, subsystem.id) && Objects.equals(name, subsystem.name) && Objects.equals(vendorId, subsystem.vendorId);
+        Subsystem that = (Subsystem) o;
+        return this.id == that.id && this.vendorId == that.vendorId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, vendorId);
+        return this.id ^ this.vendorId;
     }
 
     public String toString() {

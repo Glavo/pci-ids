@@ -77,7 +77,7 @@ public final class Vendor implements Comparable<Vendor> {
      *
      * @param device Device to add
      */
-    public void addDevice(Device device) {
+    void addDevice(Device device) {
         ArgumentValidator.requireNonNull(device, "Vendor device");
 
         this.devices.put(device.getId(), device);

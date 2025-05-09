@@ -68,7 +68,7 @@ public final class DeviceClass implements Comparable<DeviceClass> {
      *
      * @param subclass Subclass to add
      */
-    public void addSubclass(DeviceSubclass subclass) {
+    void addSubclass(DeviceSubclass subclass) {
         ArgumentValidator.requireNonNull(subclass, "Device subclass");
 
         this.subclasses.put(subclass.getId(), subclass);

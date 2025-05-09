@@ -23,6 +23,7 @@ import java.util.regex.Pattern;
 import org.glavo.pci.ids.model.Device;
 import org.glavo.pci.ids.model.DeviceClass;
 import org.glavo.pci.ids.model.DeviceSubclass;
+import org.glavo.pci.ids.model.ModelAccessImpl;
 import org.glavo.pci.ids.model.ProgramInterface;
 import org.glavo.pci.ids.model.Subsystem;
 import org.glavo.pci.ids.model.Vendor;
@@ -36,6 +37,8 @@ import java.util.Map;
  * @since 0.1
  */
 public final class DatabaseFileParser {
+
+    private static final ModelAccess ACCESS = new ModelAccessImpl(new ModelAccess.Key());
 
     /**
      * RegEx pattern used to parse database file lines of type {@link LineType#VENDOR VENDOR}.
@@ -125,7 +128,7 @@ public final class DatabaseFileParser {
                                 throw new IOException("Encountered unexpected device line");
                             }
                             // Add the previous device to the current vendor
-                            currentVendor.addDevice(currentDevice);
+                            ACCESS.addDevice(currentVendor, currentDevice);
                         }
                         currentDevice = this.parseDeviceLine(line);
                         break;
@@ -135,7 +138,8 @@ public final class DatabaseFileParser {
                         if (currentDevice == null) {
                             throw new IOException("Encountered unexpected subsystem line");
                         }
-                        currentDevice.addSubsystem(this.parseSubsystemLine(line));
+
+                        ACCESS.addSubsystem(currentDevice, this.parseSubsystemLine(line));
                         break;
                     case VENDOR:
                         previousLineType = LineType.VENDOR;
@@ -144,7 +148,7 @@ public final class DatabaseFileParser {
                         if (currentVendor != null) {
                             // Is there a device left to be added to the previous vendor?
                             if (currentDevice != null) {
-                                currentVendor.addDevice(currentDevice);
+                                ACCESS.addDevice(currentVendor, currentDevice);
                                 currentDevice = null;
                             }
                             // Add the previous vendor to the return list
@@ -159,7 +163,7 @@ public final class DatabaseFileParser {
                         if (currentClass != null) {
                             // Is there a subclass left to be added to the previous device class?
                             if (currentSubclass != null) {
-                                currentClass.addSubclass(currentSubclass);
+                                ACCESS.addSubclass(currentClass, currentSubclass);
                                 currentSubclass = null;
                             }
                             // Add the previous device class to the return list
@@ -176,7 +180,7 @@ public final class DatabaseFileParser {
                                 throw new IOException("Encountered unexpected device subclass line");
                             }
                             // Add the previous subclass to the current device class
-                            currentClass.addSubclass(currentSubclass);
+                            ACCESS.addSubclass(currentClass, currentSubclass);
                         }
                         currentSubclass = this.parseDeviceSubclassLine(line);
                         break;
@@ -186,7 +190,7 @@ public final class DatabaseFileParser {
                         if (currentSubclass == null) {
                             throw new IOException("Encountered unexpected program interface line");
                         }
-                        currentSubclass.addProgramInterface(this.parseProgramInterfaceLine(line));
+                        ACCESS.addProgramInterface(currentSubclass, this.parseProgramInterfaceLine(line));
                         break;
                     default:
                         throw new IOException("Encountered invalid line format in database file");
@@ -198,14 +202,14 @@ public final class DatabaseFileParser {
             if (currentVendor != null) {
                 // Is there a device left to be added to the previous vendor?
                 if (currentDevice != null) {
-                    currentVendor.addDevice(currentDevice);
+                    ACCESS.addDevice(currentVendor, currentDevice);
                 }
                 vendorDb.put(currentVendor.getId(), currentVendor);
             }
             if (currentClass != null) {
                 // Is there a subclass left to be added to the previous device class?
                 if (currentSubclass != null) {
-                    currentClass.addSubclass(currentSubclass);
+                    ACCESS.addSubclass(currentClass, currentSubclass);
                 }
                 // Add the previous device class to the return list
                 deviceClassDb.put(currentClass.getId(), currentClass);

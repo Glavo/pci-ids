@@ -78,7 +78,7 @@ public final class Device implements Comparable<Device> {
      *
      * @param subsys Subsystem to add
      */
-    public void addSubsystem(Subsystem subsys) {
+    void addSubsystem(Subsystem subsys) {
         ArgumentValidator.requireNonNull(subsys, "Device subsystem");
 
         this.subsystems.add(subsys);

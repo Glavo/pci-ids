@@ -66,7 +66,7 @@ public final class DeviceSubclass implements Comparable<DeviceSubclass> {
      *
      * @param iface Program interface to add
      */
-    public void addProgramInterface(ProgramInterface iface) {
+    void addProgramInterface(ProgramInterface iface) {
         ArgumentValidator.requireNonNull(iface, "Device subclass program interface");
 
         this.programInterfaces.put(iface.getId(), iface);
